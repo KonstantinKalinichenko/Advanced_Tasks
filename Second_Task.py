@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 class Item:
     def __init__(self, date, product, quantity):
         self.date = date
@@ -7,12 +10,8 @@ class Item:
 def generate_product_report(data):
     records = data.split(';')
     items = [Item(*record.split(':')) for record in records]
-    full_report = {}
+    full_report = defaultdict(lambda: defaultdict(int))
     for item in items:
-        if item.product not in full_report:
-            full_report[item.product] = {}
-        if item.date not in full_report[item.product]:
-            full_report[item.product][item.date] = 0
         full_report[item.product][item.date] += item.quantity
 
     result = []
