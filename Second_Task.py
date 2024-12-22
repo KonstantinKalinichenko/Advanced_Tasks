@@ -23,7 +23,8 @@ def generate_product_report(data):
     return result
 
 
-input_data =  input()
-product_report_generator = generate_product_report(input_data)
-for report in product_report_generator:
-    print(report)
+if __name__ == "__main__":
+    input_data =  input()
+    product_report_generator = generate_product_report(input_data)
+    for report in product_report_generator:
+        print(report)

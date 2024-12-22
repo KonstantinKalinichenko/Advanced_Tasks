@@ -8,6 +8,7 @@ def process_number(n) -> str:
         return 'Превышено'
 
 
-input_string = input()
-result = process_number(input_string)
-print(result)
+if __name__ == "__main__":
+    input_string = input()
+    result = process_number(input_string)
+    print(result)
