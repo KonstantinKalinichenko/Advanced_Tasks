@@ -4,10 +4,10 @@ class Student:
         self.courses = {} # key - course, value - grade
 
     def add_course(self, course_name, grade): # add new course and grade
-        self.courses[course_name] = grade
+        self.courses[course_name] = int(grade) # transform string grade to int
 
     def get_grade(self, course_name): # get student's grade of chosen course
-        return self.courses[course_name]
+        return self.courses.get(course_name, None)
 
     def __repr__(self):
         return f"Student(name = {self.name}, courses = {self.courses})"
@@ -15,43 +15,43 @@ class Student:
 
 class CourseManager:
     def __init__(self):
-        self.students = {} # тут будут пары Студент : Его балл по предмету
-    """Ваш код"""
+        self.students = {}
+
+    def add_student(self, name, course_name, grade):
+        if name not in self.students:
+            self.students[name] = Student(name)
+        self.students[name].add_course(course_name, grade)
+
+    def get_courses_without_failures(self, passing_scores):
+        passing_scores_dict = {
+            course: int(score) for course, score in (
+                pair.split(',') for pair in passing_scores.split(';')
+            )
+        }
+        all_courses = set(passing_scores_dict.keys())
+        courses_with_failures = set()
+
+        for student in self.students.values():
+            for course, grade in student.courses.items():
+                if grade <= passing_scores_dict[course]:
+                    courses_with_failures.add(course)
+
+        courses_without_failures = all_courses - courses_with_failures
+        return courses_without_failures
 
 
+students_info = input().strip()
+scores_info = input().strip()
 
-students_info = input()
-a = students_info.split(';')
-subjects = [i.split(',') for i in a]
-print(subjects)
+course_manager = CourseManager()
+for record in students_info.split(';'):
+    name, course_name, grade = record.split(',')
+    course_manager.add_student(name, course_name, grade)
 
-students = {}
-for subject in subjects:
-    name, course_name, grade = subject[0], subject[1], subject[2]
-    if name not in students:
-        students[name] = Student(name=name)
-    students[name].add_course(course_name, grade)
+courses_without_failures = course_manager.get_courses_without_failures(scores_info)
 
-
-# print(students["Анна"].get_grade("Психология"))
-
-def get_grade_for_student(students, student_name, course_name):
-    student = students.get(student_name)
-    return student.get_grade(course_name)
-
-print(get_grade_for_student(students, "Анна", "Психология"))
-
-
-
-
-
-
-# scores_info = input()
-#
-# splitted_subjects = scores_info.split(';')
-# subject_min = [i.split(',') for i in splitted_subjects]
-# subject_score = {}
-# for i in subject_min:
-#     subject_score[i[0]] = int(i[1])
-# print(subject_score)
-
+if courses_without_failures:
+    for course in sorted(courses_without_failures):
+        print(course)
+else:
+    print("Пусто")
