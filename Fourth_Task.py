@@ -14,6 +14,7 @@ def encode_string(string: str) -> str:
     return res
 
 
-input_string = input()
-encoded_string = encode_string(input_string)
-print(encoded_string)
+if __name__ == '__main__':
+    input_string = input()
+    encoded_string = encode_string(input_string)
+    print(encoded_string)
