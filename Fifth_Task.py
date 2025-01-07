@@ -17,37 +17,37 @@ class UserManager:
 
    def get_users(self): # вернет список всех пользователей с их текущим уровнем доступа
        if self.users:
-           for k, v in self.users.items():
-               print(f'{k}: {v}')
+           result = [f'{k}: {v}' for k, v in self.users.items()]
+           return '\n'.join(result)
        else:
-           print('Не найдено')
+           return 'Не найдено'
 
+if __name__ == "__main__":
+    user_manager = UserManager()
+    input_string = []
 
-user_manager = UserManager()
-input_string = []
+    while True:
+       try:
+          line = input()
+          if line == "":
+             break
+       except EOFError:
+          break
+       input_string.append(line)
 
-while True:
-   try:
-      line = input()
-      if line == "":
-         break
-   except EOFError:
-      break
-   input_string.append(line)
+    res = [item.strip().split() for item in input_string]
 
-res = [item.strip().split() for item in input_string]
-
-for command in res:
-    if command[0] == 'add_user':
-        if len(command) == 3:
-            user_manager.add_user(command[1], command[2])
+    for command in res:
+        if command[0] == 'add_user':
+            if len(command) == 3:
+                user_manager.add_user(command[1], command[2])
+            else:
+                user_manager.add_user(command[1], '1')
+        elif command[0] == 'remove_user':
+            user_manager.remove_user(command[1])
+        elif command[0] == 'promote':
+            user_manager.promote(command[1])
+        elif command[0] == 'demote':
+            user_manager.demote(command[1])
         else:
-            user_manager.add_user(command[1], '1')
-    elif command[0] == 'remove_user':
-        user_manager.remove_user(command[1])
-    elif command[0] == 'promote':
-        user_manager.promote(command[1])
-    elif command[0] == 'demote':
-        user_manager.demote(command[1])
-    else:
-        user_manager.get_users()
+            print(user_manager.get_users())
